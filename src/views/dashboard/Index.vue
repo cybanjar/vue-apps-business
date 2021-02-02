@@ -1,0 +1,158 @@
+<template>
+    <div class="container-fluid mt-5">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="font-weight-bold">Main Menu</h5>
+                        <hr>
+                        <ul class="list-group">
+                            <router-link :to="{name: 'dashboard'}"
+                                class="list-group-item text-dark text-decoration-none">Dashboard</router-link>
+                            <router-link :to="{name: 'dataPost'}"
+                                class="list-group-item text-dark text-decoration-none">Data Post</router-link>
+                            <li @click.prevent="logout" class="list-group-item text-dark text-decoration-none"
+                                style="cursor:pointer">Log Out</li>
+                            
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="font-weight-bold">Dashboard</h5>
+                        <hr>
+                        Selamat Datang <strong>Ucup</strong>
+                    </div>
+                </div>
+                <div class="row">
+                    <div v-for="post in dataPost" :key="post.id" class="col-6">
+                        <div  class="card mt-2">
+                        <img src="../../assets/logoApps.png" class="img-post card-img-top">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ post.nama }} | {{ post.kategori }} </h5>
+                                <p class="card-text">{{ post.deskripsi }} - {{ post.kondisi }} - {{ post.lokasi }} </p>
+                                <a href="#" class="btn btn-secondary float-right">{{ post.harga }}</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+import { onMounted, reactive, toRefs } from 'vue'
+import { useRouter } from 'vue-router'
+import axios from 'axios'
+
+    export default {
+
+        setup() {
+
+            let dataPost = []
+
+            const state = reactive({                
+                dataPost: []
+            })
+
+            //state token
+            const token = localStorage.getItem('token')
+
+            //inisialisasi vue router on Composition API
+            const router = useRouter()
+
+            //state user
+            // const user = ref('')
+            
+            //mounted properti
+            onMounted(async () =>{
+                //check Token exist
+                if(!token) {
+                    return router.push({
+                        name: 'login'
+                    })
+                }
+
+                //get data user
+                axios.defaults.headers.common.Authorization = `Bearer ${token}`
+
+                loadPost()
+                // loadUser()
+                
+                // await axios.get('http://localhost:8000/api/user')
+                // .then(response => {
+
+                //     console.log('Data name : ', response.data.name)
+                //     user.value = response.data
+
+                // })
+                // .catch(error => {
+                //     console.log(error.response.data)
+                // })                
+
+            })
+
+            // const loadUser = async () => {
+            //     const user = await axios.get('http://localhost:8000/api/user')
+            //     .then(response => {
+            //         user.value = response.data
+            //         const dataLoadUser = user['data']
+            //         console.log("Data users", dataLoadUser)
+            //     })
+            //     .catch(error => {
+            //         console.log('error', error)
+            //     })    
+
+            // }
+
+            const loadPost = async () => {
+                const post = await axios.get('http://localhost:8000/api/post')
+                state.dataPost = post['data']
+                console.log(dataPost);
+            }
+
+            //method logout
+            function logout() {
+
+                //logout
+                axios.defaults.headers.common.Authorization = `Bearer ${token}`
+                axios.post('http://localhost:8000/api/logout')
+                .then(response => {
+
+                    if(response.data.success) {
+
+                        //remove localStorage
+                        localStorage.removeItem('token')
+
+                        //redirect ke halaman login
+                        return router.push({
+                            name: 'login'
+                        })
+
+                    }
+
+                })
+                .catch(error => {
+                    console.log(error.response.data)
+                })
+
+            }
+
+            return {
+                ...toRefs(state),
+                token,      // <-- state token
+                // user,       // <-- state user
+                logout,     // <-- method logout
+                loadPost,
+                // loadUser
+
+            }
+
+        }
+
+    }
+</script>
