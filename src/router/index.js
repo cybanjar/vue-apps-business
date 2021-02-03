@@ -22,6 +22,11 @@ const routes = [
         component: () => import('@/views/auth/DataPost.vue')
     },
     {
+        path: '/new-post',
+        name: 'newPost',
+        component: () => import('@/views/dashboard/NewPost.vue')
+    },
+    {
         path: "/notFound",
         name: "notFound",
         component: () => import('@/views/notFound.vue')

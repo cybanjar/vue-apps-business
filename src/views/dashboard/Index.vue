@@ -23,9 +23,12 @@
                     <div class="card-body">
                         <h5 class="font-weight-bold">Dashboard</h5>
                         <hr>
-                        Selamat Datang <strong>Ucup</strong>
+                        Selamat Datang <strong>Ahmad</strong>
+                        <!-- <button link type="button" class="btn btn-info float-right"> <i class="bi bi-plus-square"></i> New Post </button> -->
+                        <a href="/new-post" class="float-right bg-primary text-white py-2 px-4 rounded-lg"> <i class="bi bi-plus-square"></i> New Post </a>
                     </div>
                 </div>
+
                 <div class="row">
                     <div v-for="post in dataPost" :key="post.id" class="col-6">
                         <div  class="card mt-2">
@@ -56,7 +59,8 @@ import axios from 'axios'
             let dataPost = []
 
             const state = reactive({                
-                dataPost: []
+                dataPost: [],
+                user: "",
             })
 
             //state token
@@ -81,7 +85,7 @@ import axios from 'axios'
                 axios.defaults.headers.common.Authorization = `Bearer ${token}`
 
                 loadPost()
-                // loadUser()
+                loadUser()
                 
                 // await axios.get('http://localhost:8000/api/user')
                 // .then(response => {
@@ -96,18 +100,18 @@ import axios from 'axios'
 
             })
 
-            // const loadUser = async () => {
-            //     const user = await axios.get('http://localhost:8000/api/user')
-            //     .then(response => {
-            //         user.value = response.data
-            //         const dataLoadUser = user['data']
-            //         console.log("Data users", dataLoadUser)
-            //     })
-            //     .catch(error => {
-            //         console.log('error', error)
-            //     })    
+            const loadUser = async () => {
+                const user = await axios.get('http://localhost:8000/api/user')
+                .then(response => {
+                    user.value = response.data
+                    const dataLoadUser = user['data']
+                    console.log("Data users", dataLoadUser)
+                })
+                .catch(error => {
+                    console.log('error', error)
+                })    
 
-            // }
+            }
 
             const loadPost = async () => {
                 const post = await axios.get('http://localhost:8000/api/post')
@@ -147,7 +151,7 @@ import axios from 'axios'
                 token,      // <-- state token
                 // user,       // <-- state user
                 logout,     // <-- method logout
-                loadPost,
+                // loadPost,
                 // loadUser
 
             }
