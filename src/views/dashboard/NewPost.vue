@@ -122,8 +122,42 @@ import axios from 'axios'
             }
 
             function post(){
-                const {name, harga, deskripsi, kondisi, lokasi, kategory, image} = state
-                console.log('sukses', name, harga, deskripsi, kondisi, lokasi, kategory, image);
+                // axios.get('https://jsonplaceholder.typicode.com/todos/1',)
+                // .then(res => {
+                //     console.log('sukses', res);
+                // })
+                // .catch(err => {
+                //     console.log('sukses', err);
+                // })
+                const token = '08982b81c578689e9398d5452acc0b4265ecfa8ec9eb4f7af62eebf0a3f4ad7ff7221bc6af440a9c'
+                axios.defaults.headers.common.Authorization = `token ${token}`
+                axios.get('https://service-appsbussiness.herokuapp.com/posting')
+                .then(res => {
+                    console.log('sukses123', res);
+                })
+                .catch(err => {
+                    console.log('sukses123', err);
+
+                })
+                // axios.post('https://service-appsbussiness.herokuapp.com/posting', {
+                //     "nama": "Pisang Goreng",
+                //     "harga": 10000,
+                //     "deskripsi": "Lembut di mulut",
+                //     "lokasi": "Desa Kebanggan",
+                //     "kategori": "kuliner",
+                //     "photo":  state.image
+                // },
+                // {
+                //     headers: {
+                //       token: '08982b81c578689e9398d5452acc0b4265ecfa8ec9eb4f7af62eebf0a3f4ad7ff7221bc6af440a9c'
+                //     }
+                // }
+                // ).then(res => {
+                //     console.log('sukses123', res);
+                // }).catch(err => {
+                //     console.log('sukses123', err);
+
+                // })
             }
 
             function onFileChange(e) {
