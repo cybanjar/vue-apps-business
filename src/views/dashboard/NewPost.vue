@@ -1,40 +1,40 @@
 <template>
     <div>
-        <h3 class="text-center mt-4">New Post</h3>
+        <h5 class="text-center font-weight-bold mt-4">New Post</h5>
         <div class="container">
             <div class="row">
                 <div class="col-md-6 mx-auto">
-                    <form>
+                    <form @submit.prevent="newposting">
                         <div class="form-group">
                             <label for="nama">Nama</label>
-                            <input type="text" class="form-control" id="nama">
+                            <input type="text" v-model="nama"  class="form-control" id="nama">
                         </div>
                         <div class="form-group">
                             <label for="harga">Harga</label>
-                            <input type="number" class="form-control" id="harga">
+                            <input type="number" v-model="harga" class="form-control" id="harga">
                         </div>
                         <div class="form-group">
                             <label for="deskripsi">Deskripsi</label>
-                            <input type="text" class="form-control" id="deskripsi">
+                            <input type="text" v-model="deskripsi" class="form-control" id="deskripsi">
                         </div>
                         <div class="form-group">
                             <label for="kondisi">Kondisi</label>
-                            <select class="form-control" id="kondisi">
-                                <option>Baru</option>
-                                <option>Bekas</option>
+                            <select class="form-control" v-model="kondisi" id="kondisi">
+                                <option value="baru">Baru</option>
+                                <option  value="bekas">Bekas</option>
                             </select>
                         </div>
                         <div class="form-group">
                             <label for="lokasi">Lokasi</label>
-                            <input type="text" class="form-control" id="lokasi">
+                            <input type="text" v-model="lokasi" class="form-control" id="lokasi">
                         </div>
                         <div class="form-group">
                             <label for="kategori">Kategori</label>
-                            <input type="text" class="form-control" id="kategori">
+                            <input type="text" v-model="kategori" class="form-control" id="kategori">
                         </div>
                         <div class="form-group">
                             <label for="photo">Upload</label>
-                            <input type="file" class="form-control-file" id="photo">
+                            <input type="file" @change="onFileChange" class="form-control-file" id="photo">
                         </div>
                         <button type="submit" class="btn btn-primary float-right">Submit</button>
                     </form>
@@ -45,7 +45,7 @@
 </template>
 
 <script>
-import { onMounted, reactive, toRefs } from 'vue'
+import { onMounted, reactive, toRefs, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import axios from 'axios'
 
@@ -53,11 +53,14 @@ import axios from 'axios'
 
         setup() {
 
-            let dataPost = []
-
             const state = reactive({                
-                dataPost: [],
-                user: "",
+                nama: "",
+                harga: "",
+                deskripsi: "",
+                kondisi: "",
+                lokasi: "",
+                kategori: "",
+                picturePath: "",
             })
 
             //state token
@@ -66,8 +69,69 @@ import axios from 'axios'
             //inisialisasi vue router on Composition API
             const router = useRouter()
 
+            // state validation
+            const validation = ref([])
+
+            // method newposting
+            function newposting() {
+                // axios.defaults.headers.common.Authorization = `Bearer ${token}`
+
+                console.log("TOken ada? ", `Bearer ${token}`);
+                console.log("State", state);
+
+                // let nama = state.nama
+                // let harga = state.harga
+                // let deskripsi = state.deskripsi
+                // let kondisi = state.kondisi
+                // let lokasi = state.lokasi
+                // let kategori = state.kategori
+                // let picturePath = state.picturePath
+
+                //send server with axios
+                const body = {
+                      "nama": "nama",
+                      "harga": 12000,
+                      "deskripsi": "deskripsi",
+                      "kondisi": "kondisi",
+                      "lokasi":"lokasi",
+                      "kategori":  "kuliner",
+                      "picturePath":  state.picturePath
+
+                }
+                console.log(body);
+
+                axios.post('https://backend-apps8.herokuapp.com/api/posting', body,
+                {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                }
+                )
+                .then(() => {
+                    console.log("Success New Posting");
+
+                    //redirect ke halaman login
+                    return router.push({
+                        name: 'dashboard'
+                    })
+
+                }).catch(error => {
+                    //set validation dari error response
+                    validation.value = error.response.data
+                })
+            }
+
+            const onFileChange = (e) => {
+                const files = e.target.files || e.dataTransfer.files
+                if (!files.length) 
+                    return;
+                    state.picturePath = files[0]
+   
+            }
+
             //mounted properti
             onMounted(async () =>{
+                console.log('token ada: ', token);
                 //check Token exist
                 if(!token) {
                     return router.push({
@@ -78,24 +142,18 @@ import axios from 'axios'
                 //get data user
                 axios.defaults.headers.common.Authorization = `Bearer ${token}`
 
-                loadPost()
 
             })
 
-            const loadPost = async () => {
-                const post = await axios.get('http://localhost:8000/api/post')
-                state.dataPost = post['data']
-                console.log(dataPost);
-            }
 
             //method logout
             function logout() {
                 //logout
                 axios.defaults.headers.common.Authorization = `Bearer ${token}`
-                axios.post('http://localhost:8000/api/logout')
+                axios.post('https://backend-apps8.herokuapp.com/api/logout')
                 .then(response => {
 
-                    if(response.data.success) {
+                    if(response.data) {
 
                         //remove localStorage
                         localStorage.removeItem('token')
@@ -118,6 +176,8 @@ import axios from 'axios'
                 ...toRefs(state),
                 token,      // <-- state token
                 logout,     // <-- method logout
+                newposting,
+                onFileChange
 
             }
 

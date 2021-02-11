@@ -1,7 +1,7 @@
 <template>
     <div class="container-fluid mt-5">
         <div class="row justify-content-center">
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <div v-if="loginFailed" class="alert alert-danger">
                     Email atau Password Anda salah.
                 </div>
@@ -73,17 +73,17 @@
                 let password = user.password
 
                 //send server with axios
-                axios.post('http://localhost:8000/api/login', {
+                axios.post('https://backend-apps8.herokuapp.com/api/login', {
                         email,
                         password,
                 })
                 .then(response => {
                     console.log("Response Success", response);
-                    if(response.data.success) {
+                    if(response.data) {
 
                         //set token
-                        localStorage.setItem('token', response.data.token)
-                        console.log("Token : ", response.data.token);
+                        localStorage.setItem('token', response.data.data.access_token)
+                        console.log("Token : ", response.data.data.access_token);
 
                         //redirect ke halaman dashboard
                         return router.push({

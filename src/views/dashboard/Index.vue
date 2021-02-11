@@ -31,10 +31,11 @@
 
                 <div class="row">
                     <div v-for="post in dataPost" :key="post.id" class="col-6">
+                        {{'https://backend-apps8.herokuapp.com'+post.picturePath}}
                         <div  class="card mt-2">
-                        <img src="../../assets/logoApps.png" class="img-post card-img-top">
+                        <img :src="'https://backend-apps8.herokuapp.com'+post.picturePath" class="img-post card-img-top">
                             <div class="card-body">
-                                <h5 class="card-title">{{ post.nama }} | {{ post.kategori }} </h5>
+                                <h5 class="card-title">{{ post.picturePath }} |{{ post.nama }} | {{ post.kategori }} </h5>
                                 <p class="card-text">{{ post.deskripsi }} - {{ post.kondisi }} - {{ post.lokasi }} </p>
                                 <a href="#" class="btn btn-secondary float-right">{{ post.harga }}</a>
                             </div>
@@ -57,7 +58,7 @@ import axios from 'axios'
         setup() {
 
             let dataPost = []
-
+    
             const state = reactive({                
                 dataPost: [],
                 user: "",
@@ -85,7 +86,7 @@ import axios from 'axios'
                 axios.defaults.headers.common.Authorization = `Bearer ${token}`
 
                 loadPost()
-                loadUser()
+                // loadUser()
                 
                 // await axios.get('http://localhost:8000/api/user')
                 // .then(response => {
@@ -100,21 +101,21 @@ import axios from 'axios'
 
             })
 
-            const loadUser = async () => {
-                const user = await axios.get('http://localhost:8000/api/user')
-                .then(response => {
-                    user.value = response.data
-                    const dataLoadUser = user['data']
-                    console.log("Data users", dataLoadUser)
-                })
-                .catch(error => {
-                    console.log('error', error)
-                })    
+            // const loadUser = async () => {
+            //     const user = await axios.get('https://backend-apps8.herokuapp.com/api/user')
+            //     .then(response => {
+            //         user.value = response.data
+            //         const dataLoadUser = user['data']
+            //         console.log("Data users", dataLoadUser)
+            //     })
+            //     .catch(error => {
+            //         console.log('error', error)
+            //     })    
 
-            }
+            // }
 
             const loadPost = async () => {
-                const post = await axios.get('http://localhost:8000/api/post')
+                const post = await axios.get('https://backend-apps8.herokuapp.com/api/posting')
                 state.dataPost = post['data']
                 console.log(dataPost);
             }
@@ -124,7 +125,12 @@ import axios from 'axios'
 
                 //logout
                 axios.defaults.headers.common.Authorization = `Bearer ${token}`
-                axios.post('http://localhost:8000/api/logout')
+                localStorage.removeItem('token')
+                router.push({
+                        name: 'login'
+                    })
+
+                axios.post('https://backend-apps8.herokuapp.com/api/logout')
                 .then(response => {
 
                     if(response.data.success) {

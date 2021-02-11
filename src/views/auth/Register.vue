@@ -1,7 +1,7 @@
 <template>
     <div class="container-fluid mt-5">
         <div class="row justify-content-center">
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <div class="card border-0 rounded shadow">
                     <div class="card-body">
                         <h4 class="font-weight-bold mb-3">Register</h4>
@@ -98,7 +98,7 @@
                 let phone = user.phone
 
                 //send server with axios
-                axios.post('http://localhost:8000/api/register', {
+                axios.post('https://backend-apps8.herokuapp.com/api/register', {
                         name,
                         email,
                         password,
