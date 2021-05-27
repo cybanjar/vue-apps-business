@@ -31,11 +31,11 @@
 
                 <div class="row">
                     <div v-for="post in dataPost" :key="post.id" class="col-6">
-                        {{'https://backend-apps8.herokuapp.com'+post.picturePath}}
+                        {{'https://backend-apps8.herokuapp.com/'+post.picturePath}}
                         <div  class="card mt-2">
                         <img :src="'https://backend-apps8.herokuapp.com'+post.picturePath" class="img-post card-img-top">
                             <div class="card-body">
-                                <h5 class="card-title">{{ post.picturePath }} |{{ post.nama }} | {{ post.kategori }} </h5>
+                                <h5 class="card-title">{{ post.picturePath }} | {{ post.nama }} | {{ post.kategori }} </h5>
                                 <p class="card-text">{{ post.deskripsi }} - {{ post.kondisi }} - {{ post.lokasi }} </p>
                                 <a href="#" class="btn btn-secondary float-right">{{ post.harga }}</a>
                             </div>
@@ -88,7 +88,7 @@ import axios from 'axios'
                 loadPost()
                 // loadUser()
                 
-                // await axios.get('http://localhost:8000/api/user')
+                // await axios.get('https://backend-apps8.herokuapp.com/api/user')
                 // .then(response => {
 
                 //     console.log('Data name : ', response.data.name)

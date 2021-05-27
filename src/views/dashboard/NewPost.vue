@@ -99,7 +99,8 @@ import axios from 'axios'
 
                 }
                 console.log(body);
-
+                
+                // https://backend-apps8.herokuapp.com/api/posting
                 axios.post('https://backend-apps8.herokuapp.com/api/posting', body,
                 {
                     headers: {
@@ -170,52 +171,6 @@ import axios from 'axios'
                     console.log(error.response.data)
                 })
 
-            }
-
-            function post(){
-                // axios.get('https://jsonplaceholder.typicode.com/todos/1',)
-                // .then(res => {
-                //     console.log('sukses', res);
-                // })
-                // .catch(err => {
-                //     console.log('sukses', err);
-                // })
-                const token = '08982b81c578689e9398d5452acc0b4265ecfa8ec9eb4f7af62eebf0a3f4ad7ff7221bc6af440a9c'
-                axios.defaults.headers.common.Authorization = `token ${token}`
-                axios.get('https://service-appsbussiness.herokuapp.com/posting')
-                .then(res => {
-                    console.log('sukses123', res);
-                })
-                .catch(err => {
-                    console.log('sukses123', err);
-
-                })
-                // axios.post('https://service-appsbussiness.herokuapp.com/posting', {
-                //     "nama": "Pisang Goreng",
-                //     "harga": 10000,
-                //     "deskripsi": "Lembut di mulut",
-                //     "lokasi": "Desa Kebanggan",
-                //     "kategori": "kuliner",
-                //     "photo":  state.image
-                // },
-                // {
-                //     headers: {
-                //       token: '08982b81c578689e9398d5452acc0b4265ecfa8ec9eb4f7af62eebf0a3f4ad7ff7221bc6af440a9c'
-                //     }
-                // }
-                // ).then(res => {
-                //     console.log('sukses123', res);
-                // }).catch(err => {
-                //     console.log('sukses123', err);
-
-                // })
-            }
-
-            function onFileChange(e) {
-                const files = e.target.files || e.dataTransfer.files;
-                if (!files.length)
-                return;
-                state.image = files[0]
             }
 
             return {

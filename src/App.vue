@@ -14,9 +14,6 @@
         <li class="nav-item">
           <router-link :to="{name: 'login'}" class="nav-link" href="#">Login</router-link>
         </li>
-        <li @click.prevent="logout" class="nav-item">
-          <router-link :to="{name: 'login'}" class="nav-link" href="#">Logout</router-link>
-        </li>
       </ul>
     </div>
   </nav>
